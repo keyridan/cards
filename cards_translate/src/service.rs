@@ -2,9 +2,14 @@ use std::io;
 use hyper::Error;
 use translation::{translator, request, response, language};
 use serde_json;
+use std::env;
 
 pub fn request_translation(word_to_translate: request::Translation) -> Result<response::Translation, Error> {
-    translator::request_translate("http://localhost:8000/translate", word_to_translate)
+    translator::request_translate(&translation_url(), word_to_translate)
+}
+
+fn translation_url() -> String {
+    format!("{}/translate", env::var("TRANSLATION_URL").expect("TRANSLATION_URL must be set"))
 }
 
 #[cfg(test)]

@@ -1,0 +1,6 @@
+[package]
+name = "cards_application"
+version = "0.1.0"
+authors = ["keyridan <keyridan@gmail.com>"]
+
+[dependencies]

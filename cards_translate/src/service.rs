@@ -18,18 +18,29 @@ mod tests {
 
     #[test]
     fn test_request() {
-        let result = request_translation(translation_request()).unwrap();
+        let (translation_request, expected_translation) = en_de_translation();
+        let result = request_translation(translation_request).unwrap();
         println!("{:?}", result);
-        assert_eq!(result, expected_translation());
+        assert_eq!(result, expected_translation);
     }
 
-    fn translation_request() -> request::Translation {
-        request::Translation::new("Prüfung")
-            .from(language::Language::DE)
-            .to(language::Language::EN)
+    fn en_de_translation() -> (request::Translation, response::Translation) {
+        let word = "exam";
+        let from_language = language::Language::EN;
+        let to_language = language::Language::DE;
+        let translation_request = request::Translation::new(word)
+            .from(from_language)
+            .to(to_language);
+        let expected_translation = response::Translation::new(word, "Prüfung", from_language)
+            .with_words(de_expected_translated_words());
+        (translation_request, expected_translation)
     }
 
-    fn expected_translation() -> response::Translation {
-        response::Translation::new("Prüfung", "exam", language::Language::DE)
+    fn de_expected_translated_words() -> Vec<response::TranslatedWords> {
+        vec![
+            response::TranslatedWords::new("Prüfung", Some("die".to_string())),
+            response::TranslatedWords::new("Examen", Some("das".to_string())),
+            response::TranslatedWords::new("Klausur", Some("die".to_string())),
+        ]
     }
 }

@@ -10,6 +10,7 @@ pub fn save(connection: &DieselPgConnection, new_word: &NewWord) -> Result<Word,
         .get_result::<Word>(connection)
 }
 
+//TODO insert_into instead of insert
 //pub fn save(connection: &DieselPgConnection, new_word: NewWord) -> Result<Word, DBError> {
 //    insert_into(words::table)
 //        .values(&new_word)

@@ -4,3 +4,5 @@ version = "0.1.0"
 authors = ["keyridan <keyridan@gmail.com>"]
 
 [dependencies]
+cards_core = {path = "../cards_core"}
+cards_translate = {path = "../cards_translate"}

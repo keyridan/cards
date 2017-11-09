@@ -82,7 +82,7 @@ impl<T> ToWordConvertible<Vec<Word>> for Vec<T> where T: ToWordConvertible<Word>
     }
 }
 
-#[derive(Insertable)]
+#[derive(Insertable, AsChangeset)]
 #[table_name = "words"]
 pub struct NewWord<'a> {
     pub text: &'a str,
@@ -90,7 +90,7 @@ pub struct NewWord<'a> {
     pub sex: Option<String>,
 }
 
-#[derive(Insertable)]
+#[derive(Insertable, AsChangeset)]
 #[table_name = "translations"]
 pub struct NewTranslation {
     pub word_from: i32,

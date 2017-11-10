@@ -43,6 +43,14 @@ pub fn find_by_text(connection: &DieselPgConnection, word_text: &str) -> Option<
         .expect("Database error")
 }
 
+pub fn find_by_text_and_language(connection: &DieselPgConnection, word_text: &str, language: &str) -> Option<Word> {
+    words::table
+        .filter(words::text.eq(word_text).and(words::language.eq(language)))
+        .first::<Word>(connection)
+        .optional()
+        .expect("Database error")
+}
+
 pub fn find_all_by_text(connection: &DieselPgConnection, word_text: &str) -> Vec<Word> {
     words::table
         .filter(words::text.eq(word_text))
@@ -52,6 +60,13 @@ pub fn find_all_by_text(connection: &DieselPgConnection, word_text: &str) -> Vec
 
 pub fn find_by_word(connection: &DieselPgConnection, word_from: &Word) -> Vec<TranslatedWord> {
     TranslatedWord::belonging_to(word_from)
+        .load::<TranslatedWord>(connection)
+        .expect("Error loading translated_words")
+}
+
+pub fn find_translation_to_language_by_word(connection: &DieselPgConnection, word_from: &Word, language_to: &str) -> Vec<TranslatedWord> {
+    TranslatedWord::belonging_to(word_from)
+        .filter(translation_words::language.eq(language_to))
         .load::<TranslatedWord>(connection)
         .expect("Error loading translated_words")
 }

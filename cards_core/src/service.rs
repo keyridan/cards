@@ -16,3 +16,16 @@ pub fn create_translation(connection: &DieselPgConnection, new_word: NewWord, tr
         Ok((word_from, words_to))
     })
 }
+
+pub fn find_translation(connection: &DieselPgConnection, text: &str, language_from: &str, language_to: &str) -> Option<(Word, Vec<Word>)> {
+    let find_translation_by_word = |word: Word| {
+        let translations = find_translation_to_language_by_word(connection, &word, language_to).to_word();
+        Some((word, translations))
+    };
+    let find_by_text = || {
+        find_by_text(connection, text)
+            .and_then(|word| find_translation_by_word(word))
+    };
+    find_by_text_and_language(connection, text, language_from)
+        .map_or_else(find_by_text, |word| find_translation_by_word(word))
+}

@@ -21,10 +21,10 @@ fn when_save_same_word_then_update() {
     // given
     let connection = establish();
     let test_word = test_new_word();
-    let result_word = save(&connection, &test_word).unwrap();
+    save(&connection, &test_word).unwrap();
 
     let same_word_with_updated_field = NewWord {
-        sex: Some("N".to_string()),
+        sex: None,
         ..test_word
     };
 
@@ -35,7 +35,7 @@ fn when_save_same_word_then_update() {
     println!("{:?}", result_word);
     assert_eq!(result_word.text, "экзамен");
     assert_eq!(result_word.language, "RU");
-    assert_eq!(result_word.sex, Some("N".to_string()));
+    assert_eq!(result_word.sex, None);
 }
 
 #[test]

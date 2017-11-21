@@ -4,7 +4,7 @@ version = "0.1.0"
 authors = ["keyridan <keyridan@gmail.com>"]
 
 [dependencies]
-translation = {path = "../../translation"}
+translation = {git = "https://github.com/keyridan/translation.git"}
 
 #http
 futures = "0.1"

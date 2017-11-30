@@ -4,24 +4,17 @@ use diesel::pg::upsert::*;
 use connection::*;
 
 pub fn save(connection: &DieselPgConnection, new_word: &NewWord) -> Result<Word, DBError> {
-    insert(&new_word.on_conflict((words::text, words::language),
-                                 do_update().set(new_word)))
-        .into(words::table)
+    insert_into(words::table)
+        .values(new_word)
+        .on_conflict((words::text, words::language))
+        .do_update()
+        .set(new_word)
         .get_result::<Word>(connection)
 }
 
-//TODO insert_into instead of insert
-//pub fn save(connection: &DieselPgConnection, new_word: NewWord) -> Result<Word, DBError> {
-//    insert_into(words::table)
-//        .values(&new_word)
-//        .on_conflict((words::text, words::language))
-//        .do_update()
-//        .get_result::<Word>(connection)
-//}
-
 pub fn save_all(connection: &DieselPgConnection, new_words: Vec<NewWord>) -> Result<Vec<Word>, DBError> {
-    insert(&new_words)
-        .into(words::table)
+    insert_into(words::table)
+        .values(&new_words)
         .get_results::<Word>(connection)
 }
 
@@ -80,9 +73,10 @@ fn save_translations(connection: &DieselPgConnection, translations: Vec<NewTrans
 }
 
 fn save_translation(connection: &DieselPgConnection, translation: &NewTranslation) -> Result<Translation, DBError> {
-    insert(&translation
-        .on_conflict((translations::word_from, translations::word_to),
-                     do_update().set(translation)))
-        .into(translations::table)
+    insert_into(translations::table)
+        .values(translation)
+        .on_conflict((translations::word_from, translations::word_to))
+        .do_update()
+        .set(translation)
         .get_result::<Translation>(connection)
 }
